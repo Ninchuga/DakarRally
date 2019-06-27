@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DakarRally.Models
+namespace DakarRally.DTOs
 {
-    public class Vehicle : Entity
+    public class VehicleDto
     {
         public string TeamName { get; set; }
         public string Model { get; set; }

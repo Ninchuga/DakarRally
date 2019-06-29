@@ -1,4 +1,4 @@
-﻿namespace DakarRally
+﻿namespace DakarRally.Enums
 {
     public enum RaceStatus
     {

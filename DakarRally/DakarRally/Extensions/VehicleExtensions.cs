@@ -10,9 +10,14 @@ namespace DakarRally.Extensions
         {
             return new Vehicle
             {
-                ManufacturingDate = dto.ManufacturingDate,
+                Id = dto.Id,
+                ManufacturingDate = dto.ManufacturingDate.Date,
                 Model = dto.Model,
-                TeamName = dto.TeamName
+                TeamName = dto.TeamName,
+                Distance = dto.Distance,
+                Status = dto.Status,
+                FinishTime = dto.FinishTime,
+                Type = dto.Type
             };
         }
 
@@ -20,9 +25,13 @@ namespace DakarRally.Extensions
         {   
             return new VehicleDto
             {
-                ManufacturingDate = vehicle.ManufacturingDate,
+                ManufacturingDate = vehicle.ManufacturingDate.Date,
                 Model = vehicle.Model,
-                TeamName = vehicle.TeamName
+                TeamName = vehicle.TeamName,
+                Type = vehicle.Type,
+                FinishTime = vehicle.FinishTime,
+                Status = vehicle.Status,
+                Distance = vehicle.Distance
             };
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DakarRally.Models
+namespace DakarRally.Models.Entities
 {
     public class Race : Entity
     {
@@ -13,5 +13,6 @@ namespace DakarRally.Models
         public int Year { get; set; }
         public List<Vehicle> Vehicles { get; set; }
         public string Status { get; set; }
+        public int Distance { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DakarRally.Models
+namespace DakarRally.Models.Entities
 {
     public abstract class Entity
     {

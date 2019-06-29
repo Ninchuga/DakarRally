@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DakarRally.Infrastructure;
 using DakarRally.Infrastructure.Repositories;
+using DakarRally.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,7 @@ namespace DakarRally
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddScoped<IAmRaceService, RaceService>();
             services.AddScoped<IAmRaceRepository, RaceRepository>();
 
             // register the swagger generator
@@ -60,7 +62,6 @@ namespace DakarRally
             // specify the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                //c.RoutePrefix = "help";
                 c.SwaggerEndpoint("../swagger/v1/swagger.json", "Dakar Rally API V1");
             });
 

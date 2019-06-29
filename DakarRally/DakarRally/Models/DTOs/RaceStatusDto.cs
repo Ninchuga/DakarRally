@@ -1,4 +1,4 @@
-﻿namespace DakarRally.DTOs
+﻿namespace DakarRally.Models.DTOs
 {
     public class RaceStatusDto
     {

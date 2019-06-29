@@ -1,6 +1,6 @@
 ﻿namespace DakarRally.Enums
 {
-    public enum VehicleTypes
+    public enum VehicleType
     {
         SportsCar,
         TerrainCar,

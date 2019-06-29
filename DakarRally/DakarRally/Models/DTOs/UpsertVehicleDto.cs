@@ -1,16 +1,13 @@
 ﻿using System;
 
-namespace DakarRally.DTOs
+namespace DakarRally.Models.DTOs
 {
-    public class VehicleDto
+    public class UpsertVehicleDto
     {
         public Guid Id { get; set; }
         public string TeamName { get; set; }
         public string Model { get; set; }
         public DateTime ManufacturingDate { get; set; }
         public string Type { get; set; }
-        public string Status { get; set; }
-        public double Distance { get; set; }
-        public DateTime FinishTime { get; set; }
     }
 }

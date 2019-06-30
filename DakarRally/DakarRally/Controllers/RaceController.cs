@@ -1,4 +1,5 @@
-﻿using DakarRally.Extensions;
+﻿using DakarRally.Enums;
+using DakarRally.Extensions;
 using DakarRally.Models.DTOs;
 using DakarRally.Models.Entities;
 using DakarRally.Services;
@@ -94,6 +95,25 @@ namespace DakarRally.Controllers
             var response = await _raceService.RaceStatusBy(raceId);
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("/getLeaderboardForAllVehicles")]
+        public async Task<ActionResult<List<VehicleDto>>> GetLeaderboardForAllVehicles()
+        {
+            var vehicles = await _raceService.AllVehiclesLeaderBoard();
+
+            return Ok(vehicles.ToVehicleDtoList());
+        }
+
+        [HttpGet]
+        [Route("/getLeaderboardForVehicleType")]
+        public async Task<ActionResult<List<VehicleDto>>> GetLeaderboardForVehicleType(string type)
+        {
+            Enum.TryParse(type, out VehicleType vehicleType);
+            var vehicles = await _raceService.LeaderBoardForVehicleType(vehicleType);
+
+            return Ok(vehicles);
         }
     }
 }

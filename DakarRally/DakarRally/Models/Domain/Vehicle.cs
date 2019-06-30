@@ -36,7 +36,7 @@ namespace DakarRally.Models.Domain
         public int TimeRacing { get; private set; }
         public int TimeFromBeginningOfRaceInSeconds { get; set; }
 
-        public void UpdateStatus(int checkVehicleStatusTimeInSeconds, int raceTotalDistance)
+        public Vehicle UpdateStatus(int checkVehicleStatusTimeInSeconds, int raceTotalDistance)
         {
             if(Status == VehicleStatus.Pending)
                 Status = VehicleStatus.Running;
@@ -69,6 +69,8 @@ namespace DakarRally.Models.Domain
                 Status = repairementStatus.VehicleStatus;
                 RepairmentHours = repairementStatus.RepairementHours;
             }
+
+            return this;
         }
 
         public Vehicle UpdateInfo(UpsertVehicle vehicle)

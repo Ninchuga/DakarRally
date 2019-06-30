@@ -30,10 +30,20 @@ namespace DakarRally.Services
             return await _raceRepository.AllRaces();
         }
 
+        public async Task<List<Vehicle>> AllVehiclesLeaderBoard()
+        {
+            return await _raceRepository.AllVehiclesLeaderBoard();
+        }
+
         public async Task CreateRace(int year, int rallyTotalDistance)
         {
             var newRace = Race.Create(year, rallyTotalDistance);
             await _raceRepository.Create(newRace);
+        }
+
+        public async Task<List<Vehicle>> LeaderBoardForVehicleType(VehicleType vehicleType)
+        {
+            return await _raceRepository.LeaderBoardForVehicleType(vehicleType);
         }
 
         public async Task<Race> RaceBy(int year)
@@ -54,6 +64,7 @@ namespace DakarRally.Services
 
         public async Task StartRaceBy(Guid raceId)
         {
+            // you don't save the race status in db, fix this
             await Task.Run(async () => (await _raceRepository.RaceBy(raceId)).StartRace());
         }
 

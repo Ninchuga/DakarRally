@@ -1,6 +1,7 @@
 ﻿using DakarRally.Enums;
 using DakarRally.Extensions;
 using DakarRally.Models;
+using DakarRally.Models.Domain;
 using DakarRally.Models.DTOs;
 using DakarRally.Models.Entities;
 using DakarRally.Models.ValueObjects;
@@ -109,6 +110,18 @@ namespace DakarRally.Infrastructure.Repositories
         private async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Vehicle>> AllVehiclesLeaderBoard()
+        {
+            var race = await _context.Races.Include(x => x.Vehicles).FirstOrDefaultAsync(x => x.Year.Equals(DateTime.Now.Year));
+            return race.Vehicles.ToDomainList();
+        }
+
+        public async Task<List<Vehicle>> LeaderBoardForVehicleType(VehicleType vehicleType)
+        {
+            var race = await _context.Races.Include(x => x.Vehicles).FirstOrDefaultAsync(x => x.Year.Equals(DateTime.Now.Year));
+            return race.Vehicles.Where(vehicle => vehicle.Type.Equals(vehicleType.ToString())).ToList().ToDomainList();
         }
     }
 }

@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DakarRally.Enums;
+using DakarRally.Extensions;
+using DakarRally.Infrastructure.Repositories;
+using DakarRally.Models.DTOs;
+using DakarRally.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,34 +16,20 @@ namespace DakarRally.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
+        private readonly IAmVehicleService _vehicleService;
 
-
-        //[HttpPut]
-        //[Route("/updateVehicleInfo")]
-        //public ActionResult UpdateVehicleInfo(VehicleDto vehicleDto)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        [HttpGet]
-        [Route("/getLeaderboardForAllVehicles")]
-        public ActionResult GetLeaderboardForAllVehicles()
+        public VehicleController(IAmVehicleService vehicleService)
         {
-            throw new NotImplementedException();
-        }
-
-        [HttpGet]
-        [Route("/getLeaderboardForVehicleType")]
-        public ActionResult GetLeaderboardForVehicleType(string type)
-        {
-            throw new NotImplementedException();
+            _vehicleService = vehicleService;
         }
 
         [HttpGet]
         [Route("/getVehicleStatistics")]
-        public ActionResult GetVehicleStatistics(Guid vehicleId)
+        public async Task<ActionResult<VehicleStatisticsDto>> GetVehicleStatistics(Guid vehicleId)
         {
-            throw new NotImplementedException();
+            var response = await _vehicleService.VehicleStatisticsBy(vehicleId);
+
+            return Ok(response.ToVehicleStatisticsDto());
         }
 
         [HttpGet]

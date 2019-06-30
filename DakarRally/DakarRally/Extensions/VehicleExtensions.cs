@@ -43,6 +43,26 @@ namespace DakarRally.Extensions
             return vehicles.Select(vehicle => vehicle.ToDomain()).ToList();
         }
 
+        public static List<VehicleDto> ToVehicleDtoList(this List<Models.Domain.Vehicle> vehicles)
+        {
+            return vehicles.Select(vehicle => vehicle.ToVehicleDto()).ToList();
+        }
+
+        public static VehicleDto ToVehicleDto(this Models.Domain.Vehicle vehicle)
+        {
+            return new VehicleDto
+            {
+                Id = vehicle.Id,
+                Distance = vehicle.Distance,
+                FinishTime = vehicle.FinishTime,
+                ManufacturingDate = vehicle.ManufacturingDate,
+                Model = vehicle.Model,
+                Status = vehicle.Status.ToString(),
+                TeamName = vehicle.TeamName,
+                Type = vehicle.Type.ToString()
+            };
+        }
+
         public static Models.Domain.Vehicle ToDomain(this VehicleDto vehicle)
         {
             Enum.TryParse(vehicle.Type, out VehicleType vehicleType);
@@ -98,6 +118,21 @@ namespace DakarRally.Extensions
                 FinishTime = vehicle.FinishTime,
                 Status = vehicle.Status,
                 Distance = vehicle.Distance
+            };
+        }
+
+        public static VehicleStatistics ToVehicleStatistics(this Vehicle vehicle)
+        {
+            return new VehicleStatistics(vehicle.Status, vehicle.Distance, vehicle.FinishTime);
+        }
+
+        public static VehicleStatisticsDto ToVehicleStatisticsDto(this VehicleStatistics vehicle)
+        {
+            return new VehicleStatisticsDto
+            {
+                FinishTime = vehicle.FinishTime,
+                Distance = vehicle.Distance,
+                Status = vehicle.Status
             };
         }
     }

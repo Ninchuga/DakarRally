@@ -1,4 +1,6 @@
-﻿using DakarRally.Models;
+﻿using DakarRally.Enums;
+using DakarRally.Models;
+using DakarRally.Models.Domain;
 using DakarRally.Models.DTOs;
 using DakarRally.Models.Entities;
 using DakarRally.Models.ValueObjects;
@@ -20,5 +22,7 @@ namespace DakarRally.Infrastructure.Repositories
         Task<RaceStatusDto> RaceStatusBy(Guid raceId);
         Task RemoveVehicleBy(Guid vehicleId);
         Task UpdateVehicleInfo(UpsertVehicle vehicle);
+        Task<List<Vehicle>> AllVehiclesLeaderBoard();
+        Task<List<Vehicle>> LeaderBoardForVehicleType(VehicleType vehicleType);
     }
 }

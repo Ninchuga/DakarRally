@@ -35,7 +35,9 @@ namespace DakarRally
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<IAmRaceService, RaceService>();
+            services.AddScoped<IAmVehicleService, VehicleService>();
             services.AddScoped<IAmRaceRepository, RaceRepository>();
+            //services.AddScoped<IAmVehicleRepository, VehicleRepository>();
 
             // register the swagger generator
             services.AddSwaggerGen(c =>

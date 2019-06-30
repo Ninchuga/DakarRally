@@ -1,4 +1,5 @@
 ﻿using DakarRally.Enums;
+using DakarRally.Models.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace DakarRally.Models.Domain
         public static Race Create(int year, int rallyTotalDistance)
         {
             if (year < DateTime.Now.Year)
-                throw new ArgumentException("Year cannot be in past.");
+                throw new ArgumentException("Year cannot be in the past.");
             if (rallyTotalDistance == 0)
                 throw new ArgumentException("Total distance from start to finish must be greater than 0.");
 
@@ -39,7 +40,7 @@ namespace DakarRally.Models.Domain
             return new Race(id, year, vehicles, status, distance);
         }
 
-        public void StartRace()
+        public void StartRace(int checkRaceProgressionInSeconds)
         {
             Status = RaceStatus.Running;
 
@@ -47,12 +48,14 @@ namespace DakarRally.Models.Domain
             {
                 foreach (var vehicle in Vehicles)
                 {
-                    vehicle.UpdateStatus(30, Distance);
+                    vehicle.UpdateStatus(checkRaceProgressionInSeconds, Distance);
                 }
 
                 Status = CheckRaceStatus();
 
-                Thread.Sleep(30000);
+                DomainEvents.Raise(new RaceProgressionChecked(this));
+
+                Thread.Sleep(checkRaceProgressionInSeconds * 100);
             }
         }
 

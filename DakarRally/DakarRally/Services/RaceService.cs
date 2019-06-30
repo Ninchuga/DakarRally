@@ -14,10 +14,12 @@ namespace DakarRally.Services
     public class RaceService : IAmRaceService
     {
         private readonly IAmRaceRepository _raceRepository;
+        private readonly IConfiguration _configuration;
 
-        public RaceService(IAmRaceRepository raceRepository)
+        public RaceService(IAmRaceRepository raceRepository, IConfiguration configuration)
         {
             _raceRepository = raceRepository;
+            _configuration = configuration;
         }
 
         public async Task AddVehicle(UpsertVehicle vehicle)
@@ -35,8 +37,9 @@ namespace DakarRally.Services
             return await _raceRepository.AllVehiclesLeaderBoard();
         }
 
-        public async Task CreateRace(int year, int rallyTotalDistance)
+        public async Task CreateRace(int year)
         {
+            int.TryParse(_configuration["RallyTotalDistance"], out int rallyTotalDistance);
             var newRace = Race.Create(year, rallyTotalDistance);
             await _raceRepository.Create(newRace);
         }
@@ -64,8 +67,8 @@ namespace DakarRally.Services
 
         public async Task StartRaceBy(Guid raceId)
         {
-            // you don't save the race status in db, fix this
-            await Task.Run(async () => (await _raceRepository.RaceBy(raceId)).StartRace());
+            int.TryParse(_configuration["CheckRaceProgressionInSeconds"], out int checkRaceProgressionInSeconds);
+            await Task.Run(async () => (await _raceRepository.RaceBy(raceId)).StartRace(checkRaceProgressionInSeconds));
         }
 
         public async Task UpdateVehicleInfo(UpsertVehicle vehicle)

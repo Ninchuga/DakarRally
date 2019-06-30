@@ -11,7 +11,7 @@ namespace DakarRally.Services
     public interface IAmRaceService
     {
         Task StartRaceBy(Guid raceId);
-        Task CreateRace(int year, int rallyTotalDistance);
+        Task CreateRace(int year);
         Task<Race> RaceBy(int year);
         Task<List<Race>> AllRaces();
         Task AddVehicle(UpsertVehicle vehicle);

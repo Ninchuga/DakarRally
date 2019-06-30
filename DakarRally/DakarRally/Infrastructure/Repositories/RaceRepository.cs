@@ -107,11 +107,6 @@ namespace DakarRally.Infrastructure.Repositories
             await SaveChanges();
         }
 
-        private async Task SaveChanges()
-        {
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<List<Vehicle>> AllVehiclesLeaderBoard()
         {
             var race = await _context.Races.Include(x => x.Vehicles).FirstOrDefaultAsync(x => x.Year.Equals(DateTime.Now.Year));
@@ -122,6 +117,23 @@ namespace DakarRally.Infrastructure.Repositories
         {
             var race = await _context.Races.Include(x => x.Vehicles).FirstOrDefaultAsync(x => x.Year.Equals(DateTime.Now.Year));
             return race.Vehicles.Where(vehicle => vehicle.Type.Equals(vehicleType.ToString())).ToList().ToDomainList();
+        }
+
+        public async Task Update(Race race)
+        {
+            _context.Races.Update(race.ToEntity());
+
+            foreach (var vehicle in race.Vehicles)
+            {
+                _context.Vehicles.Update(vehicle.ToEntity());
+            }
+
+            await SaveChanges();
+        }
+
+        private async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

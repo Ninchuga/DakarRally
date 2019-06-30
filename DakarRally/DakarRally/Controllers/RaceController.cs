@@ -15,12 +15,10 @@ namespace DakarRally.Controllers
     [ApiController]
     public partial class RaceController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IAmRaceService _raceService;
 
-        public RaceController(IAmRaceService raceService, IConfiguration configuration)
+        public RaceController(IAmRaceService raceService)
         {
-            _configuration = configuration;
             _raceService = raceService;
         }
 
@@ -28,8 +26,7 @@ namespace DakarRally.Controllers
         [Route("/create")]
         public async Task<ActionResult> CreateRace(int year)
         {
-            int.TryParse(_configuration["RallyTotalDistance"], out int rallyTotalDistance);
-            await _raceService.CreateRace(year, rallyTotalDistance);
+            await _raceService.CreateRace(year);
 
             return Ok();
         }

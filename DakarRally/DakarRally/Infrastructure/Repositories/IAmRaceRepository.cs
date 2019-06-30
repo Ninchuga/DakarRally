@@ -18,6 +18,7 @@ namespace DakarRally.Infrastructure.Repositories
         Task<List<Race>> AllRaces();
         Task AddVehicle(UpsertVehicle vehicle);
         Task<Race> RaceBy(int year);
+        Task Update(Race race);
         Task<Race> RaceBy(Guid raceId);
         Task<RaceStatusDto> RaceStatusBy(Guid raceId);
         Task RemoveVehicleBy(Guid vehicleId);

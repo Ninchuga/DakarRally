@@ -33,20 +33,11 @@ namespace DakarRally.Controllers
 
         [HttpGet]
         [Route("/getRace")]
-        public async Task<ActionResult> GetRaceBy(int year)
+        public async Task<ActionResult<RaceDto>> GetRaceBy(int year)
         {
             var race = await _raceService.RaceBy(year);
 
-            return Ok(race);
-        }
-
-        [HttpGet]
-        [Route("/getAllRaces")]
-        public async Task<ActionResult<List<Race>>> GetAllRaces()
-        {
-            var races = await _raceService.AllRaces();
-
-            return Ok(races);
+            return Ok(race.ToDto());
         }
 
         [HttpPost]
@@ -91,7 +82,7 @@ namespace DakarRally.Controllers
         {
             var response = await _raceService.RaceStatusBy(raceId);
 
-            return Ok(response);
+            return Ok(response.ToRaceStatusDto());
         }
 
         [HttpGet]
@@ -110,7 +101,25 @@ namespace DakarRally.Controllers
             Enum.TryParse(type, out VehicleType vehicleType);
             var vehicles = await _raceService.LeaderBoardForVehicleType(vehicleType);
 
-            return Ok(vehicles);
+            return Ok(vehicles.ToVehicleDtoList());
+        }
+
+        [HttpGet]
+        [Route("/getVehicleStatistics")]
+        public async Task<ActionResult<VehicleStatisticsDto>> GetVehicleStatistics(Guid vehicleId)
+        {
+            var response = await _raceService.VehicleStatisticsBy(vehicleId);
+
+            return Ok(response.ToVehicleStatisticsDto());
+        }
+
+        [HttpGet]
+        [Route("/findVehicle")]
+        public async Task<ActionResult<List<VehicleDto>>> FindVehicle(string teamName = null, string model = null, string status = null)
+        {
+            var response = await _raceService.FindVehicleBy(teamName, model, status);
+
+            return Ok(response.ToVehicleDtoList());
         }
     }
 }

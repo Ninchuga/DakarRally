@@ -1,6 +1,6 @@
 ﻿namespace DakarRally.Enums
 {
-    public enum RaceStatus
+    public enum RaceStatusType
     {
         Pending,
         Running,

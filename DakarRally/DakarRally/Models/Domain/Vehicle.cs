@@ -20,8 +20,6 @@ namespace DakarRally.Models.Domain
             Status = status;
             Distance = distance;
             FinishTime = finishTime;
-            //RepairmentHours = repairmentHours;
-            //TimeRacing = timeRacing;
         }
 
         public Guid Id { get; set; }
@@ -33,8 +31,8 @@ namespace DakarRally.Models.Domain
         public double Distance { get; private set; }
         public string FinishTime { get; private set; }
         public int RepairmentHours { get; private set; }
-        public int TimeRacing { get; private set; }
-        public int TimeFromBeginningOfRaceInSeconds { get; set; }
+        public double TotalTimeRacingInSeconds { get; private set; }
+        public double TimeFromBeginningOfRaceInSeconds { get; set; }
 
         public Vehicle UpdateStatus(int checkVehicleStatusTimeInSeconds, int raceTotalDistance)
         {
@@ -52,10 +50,10 @@ namespace DakarRally.Models.Domain
             if (Status == VehicleStatus.Running)
             {
                 TimeFromBeginningOfRaceInSeconds = TimeFromBeginningOfRaceInSeconds + checkVehicleStatusTimeInSeconds;
-                TimeRacing = TimeRacing + checkVehicleStatusTimeInSeconds;
+                TotalTimeRacingInSeconds = TotalTimeRacingInSeconds + checkVehicleStatusTimeInSeconds;
                 var maxSpeed = GetMaxSpeed(Type);
 
-                Distance = maxSpeed * TimeRacing;
+                Distance = maxSpeed * TotalTimeRacingInSeconds / 3600;
 
                 var currentStatus = MalfunctionHelper.CalculateMalfunctionBy(Type);
 
@@ -83,7 +81,12 @@ namespace DakarRally.Models.Domain
             return this;
         }
 
-        private double GetMaxSpeed(VehicleType type)
+        public VehicleStatistics VehicleStatistics()
+        {
+            return new VehicleStatistics(Status, Distance, FinishTime);
+        }
+
+        private int GetMaxSpeed(VehicleType type)
         {
             switch (type)
             {

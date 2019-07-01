@@ -5,8 +5,9 @@ namespace DakarRally.Models.ValueObjects
 {
     public class UpsertVehicle
     {
-        public UpsertVehicle(string teamName, string model, DateTime manufacturingDate, VehicleType type)
+        public UpsertVehicle(Guid id, string teamName, string model, DateTime manufacturingDate, VehicleType type)
         {
+            Id = id;
             TeamName = teamName;
             Model = model;
             ManufacturingDate = manufacturingDate;

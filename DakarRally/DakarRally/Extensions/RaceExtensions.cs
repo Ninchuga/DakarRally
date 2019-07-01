@@ -1,11 +1,10 @@
 ﻿using DakarRally.Enums;
-using DakarRally.Models;
 using DakarRally.Models.DTOs;
 using DakarRally.Models.Entities;
+using DakarRally.Models.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DakarRally.Extensions
 {
@@ -13,7 +12,7 @@ namespace DakarRally.Extensions
     {
         public static Models.Domain.Race ToDomain(this Race race)
         {
-            Enum.TryParse(race.Status, out RaceStatus raceStatus);
+            Enum.TryParse(race.Status, out RaceStatusType raceStatus);
             return Models.Domain.Race.Create(race.Id, race.Year, race.Vehicles.ToDomainList(), raceStatus, race.Distance);
         }
 
@@ -29,28 +28,38 @@ namespace DakarRally.Extensions
             };
         }
 
+        public static RaceDto ToDto(this Models.Domain.Race race)
+        {
+            return new RaceDto
+            {
+                Id = race.Id,
+                Distance = race.Distance,
+                Status = race.Status.ToString(),
+                Year = race.Year,
+                Vehicles = race.Vehicles.ToVehicleDtoList()
+            };
+        }
+
         public static List<Models.Domain.Race> ToDomainList(this List<Race> races)
         {
             return races.Select(race => race.ToDomain()).ToList();
         }
 
-        public static RaceStatusDto ToRaceStatusDto(this Race race)
+        public static RaceStatusDto ToRaceStatusDto(this RaceStatus race)
         {
             return new RaceStatusDto
             {
-                Status = race.Status,
-
-                NumberOfVehiclesWithPendingStatus = race.Vehicles.Where(v => v.Status == VehicleStatus.Pending.ToString()).Count(),
-                NumberOfVehiclesWithHeavyMalfunctionStatus = race.Vehicles.Where(v => v.Status == VehicleStatus.HeavyMalfunction.ToString()).Count(),
-                NumberOfVehiclesWithLightMalfunctionStatus = race.Vehicles.Where(v => v.Status == VehicleStatus.LightMalfunction.ToString()).Count(),
-                NumberOfVehiclesWithRunningStatus = race.Vehicles.Where(v => v.Status == VehicleStatus.Running.ToString()).Count(),
-                NumberOfVehiclesWithFinishedStatus = race.Vehicles.Where(v => v.Status == VehicleStatus.Finished.ToString()).Count(),
-
-                NumberOfSportCars = race.Vehicles.Where(v => v.Type == VehicleType.SportsCar.ToString()).Count(),
-                NumberOfTerrainCars = race.Vehicles.Where(v => v.Type == VehicleType.TerrainCar.ToString()).Count(),
-                NumberOfTrucks = race.Vehicles.Where(v => v.Type == VehicleType.Truck.ToString()).Count(),
-                NumberOfSportMotorcycles = race.Vehicles.Where(v => v.Type == VehicleType.SportMotorcycle.ToString()).Count(),
-                NumberOfCrossMotorcycles = race.Vehicles.Where(v => v.Type == VehicleType.CrossMotorcycle.ToString()).Count()
+                Status = race.Status.ToString(),
+                NumberOfVehiclesWithPendingStatus = race.NumberOfVehiclesWithPendingStatus,
+                NumberOfVehiclesWithHeavyMalfunctionStatus = race.NumberOfVehiclesWithHeavyMalfunctionStatus,
+                NumberOfVehiclesWithLightMalfunctionStatus = race.NumberOfVehiclesWithLightMalfunctionStatus,
+                NumberOfVehiclesWithRunningStatus = race.NumberOfVehiclesWithRunningStatus,
+                NumberOfVehiclesWithFinishedStatus = race.NumberOfVehiclesWithFinishedStatus,
+                NumberOfSportCars = race.NumberOfSportCars,
+                NumberOfTerrainCars = race.NumberOfTerrainCars,
+                NumberOfTrucks = race.NumberOfTrucks,
+                NumberOfSportMotorcycles = race.NumberOfSportMotorcycles,
+                NumberOfCrossMotorcycles = race.NumberOfCrossMotorcycles
             };
         }
     }

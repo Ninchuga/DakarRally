@@ -74,22 +74,7 @@ namespace DakarRally.Extensions
         public static UpsertVehicle ToUpsertVehicle(this UpsertVehicleDto vehicle)
         {
             Enum.TryParse(vehicle.Type, out VehicleType vehicleType);
-            return new UpsertVehicle(vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicleType);
-        }
-
-        public static Vehicle ToEntity(this UpsertVehicle vehicle)
-        {
-            return new Vehicle
-            {
-                Id = Guid.NewGuid(),
-                TeamName = vehicle.TeamName,
-                ManufacturingDate = vehicle.ManufacturingDate,
-                Model = vehicle.Model,
-                Type = vehicle.Type.ToString(),
-                Distance = 0,
-                FinishTime = string.Empty,
-                Status = RaceStatus.Pending.ToString()
-            };
+            return new UpsertVehicle(vehicle.Id, vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicleType);
         }
 
         public static Vehicle ToEntity(this VehicleDto dto)
@@ -121,18 +106,13 @@ namespace DakarRally.Extensions
             };
         }
 
-        public static VehicleStatistics ToVehicleStatistics(this Vehicle vehicle)
-        {
-            return new VehicleStatistics(vehicle.Status, vehicle.Distance, vehicle.FinishTime);
-        }
-
         public static VehicleStatisticsDto ToVehicleStatisticsDto(this VehicleStatistics vehicle)
         {
             return new VehicleStatisticsDto
             {
                 FinishTime = vehicle.FinishTime,
                 Distance = vehicle.Distance,
-                Status = vehicle.Status
+                Status = vehicle.Status.ToString()
             };
         }
     }

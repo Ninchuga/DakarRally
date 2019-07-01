@@ -1,6 +1,5 @@
 ﻿using DakarRally.Enums;
 using DakarRally.Models.Domain;
-using DakarRally.Models.DTOs;
 using DakarRally.Models.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -13,12 +12,14 @@ namespace DakarRally.Services
         Task StartRaceBy(Guid raceId);
         Task CreateRace(int year);
         Task<Race> RaceBy(int year);
-        Task<List<Race>> AllRaces();
+        Task<Race> RaceBy(Guid raceId);
         Task AddVehicle(UpsertVehicle vehicle);
         Task RemoveVehicleBy(Guid vehicleId);
         Task UpdateVehicleInfo(UpsertVehicle vehicle);
-        Task<RaceStatusDto> RaceStatusBy(Guid raceId);
+        Task<RaceStatus> RaceStatusBy(Guid raceId);
         Task<List<Vehicle>> AllVehiclesLeaderBoard();
         Task<List<Vehicle>> LeaderBoardForVehicleType(VehicleType vehicleType);
+        Task<VehicleStatistics> VehicleStatisticsBy(Guid vehicleId);
+        Task<List<Vehicle>> FindVehicleBy(string teamName, string model, string status);
     }
 }

@@ -20,7 +20,7 @@ namespace DakarRally.Extensions
         {
             return new Race
             {
-                Id = Guid.NewGuid(),
+                Id = race.Id.Equals(Guid.Empty) ? Guid.NewGuid() : race.Id,
                 Distance = race.Distance,
                 Status = race.Status.ToString(),
                 Vehicles = race.Vehicles.ToEntityList(),

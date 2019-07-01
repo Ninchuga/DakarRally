@@ -1,10 +1,5 @@
-﻿using DakarRally.Models;
-using DakarRally.Models.Entities;
+﻿using DakarRally.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DakarRally.Infrastructure
 {

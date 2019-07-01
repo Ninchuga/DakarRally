@@ -8,7 +8,6 @@ namespace DakarRally.Infrastructure.Repositories
     {
         Task<Race> RaceBy(int year);
         Task<Race> RaceBy(Guid raceId);
-        //Task Update(Race race);
         Task Upsert(Race race);
     }
 }

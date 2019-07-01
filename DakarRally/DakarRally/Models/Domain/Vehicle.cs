@@ -29,12 +29,15 @@ namespace DakarRally.Models.Domain
         public string FinishTime { get; private set; }
         public int RepairmentHours { get; private set; }
         public double TotalTimeRacingInSeconds { get; private set; }
-        public double TimeFromBeginningOfRaceInSeconds { get; set; }
+        public double TimeFromBeginningOfRaceInSeconds { get; private set; }
 
         public Vehicle UpdateStatus(int checkVehicleStatusTimeInSeconds, int raceTotalDistance)
         {
-            if(Status == VehicleStatus.Pending)
+            if (Status == VehicleStatus.Pending)
+            {
                 Status = VehicleStatus.Running;
+                return this;
+            }
 
             if (Distance >= raceTotalDistance)
             {
@@ -55,9 +58,11 @@ namespace DakarRally.Models.Domain
                 var currentStatus = MalfunctionHelper.CalculateMalfunctionBy(Type);
 
                 Status = currentStatus;
+
+                return this;
             }
 
-            if(Status == VehicleStatus.LightMalfunction)
+            if (Status == VehicleStatus.LightMalfunction)
             {
                 TimeFromBeginningOfRaceInSeconds = TimeFromBeginningOfRaceInSeconds + checkVehicleStatusTimeInSeconds;
                 var repairementStatus = MalfunctionHelper.RepairementHoursBy(Type, ++RepairmentHours);

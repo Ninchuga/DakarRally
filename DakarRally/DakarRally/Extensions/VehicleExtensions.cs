@@ -22,7 +22,7 @@ namespace DakarRally.Extensions
         {
             return new Vehicle
             {
-                Id = Guid.NewGuid(),
+                Id = vehicle.Id.Equals(Guid.Empty) ? Guid.NewGuid() : vehicle.Id,
                 Distance = vehicle.Distance,
                 FinishTime = vehicle.FinishTime,
                 ManufacturingDate = vehicle.ManufacturingDate,
@@ -74,7 +74,8 @@ namespace DakarRally.Extensions
         public static UpsertVehicle ToUpsertVehicle(this UpsertVehicleDto vehicle)
         {
             Enum.TryParse(vehicle.Type, out VehicleType vehicleType);
-            return new UpsertVehicle(vehicle.Id, vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicleType);
+            var vehicleId = vehicle.Id.Equals(Guid.Empty) ? Guid.NewGuid() : vehicle.Id;
+            return new UpsertVehicle(vehicleId, vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicleType);
         }
 
         public static Vehicle ToEntity(this VehicleDto dto)

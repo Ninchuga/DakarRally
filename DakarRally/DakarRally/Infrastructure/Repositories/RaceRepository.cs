@@ -1,6 +1,7 @@
 ﻿using DakarRally.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Race = DakarRally.Models.Domain.Race;
 
@@ -27,24 +28,10 @@ namespace DakarRally.Infrastructure.Repositories
             return race.ToDomain();
         }
 
-        //public async Task Update(Race race)
-        //{
-        //    var raceEntity = race.ToEntity();
-        //    await _context.Races.AddAsync(raceEntity);
-
-        //    foreach (var vehicle in race.Vehicles)
-        //    {
-        //        var vehicleEntity = vehicle.ToEntity();
-        //        await _context.Vehicles.AddAsync(vehicleEntity);
-        //    }
-
-        //    await SaveChanges();
-        //}
-
         public async Task Upsert(Race race)
         {
-            var raceEntity = await _context.Races.FirstOrDefaultAsync(r => r.Id.Equals(race.Id));
-            if (raceEntity == null)
+            var raceEntityExists = await _context.Races.AsNoTracking().AnyAsync(r => r.Id.Equals(race.Id));
+            if (!raceEntityExists)
                 await _context.Races.AddAsync(race.ToEntity());
             else
                 _context.Races.Update(race.ToEntity());

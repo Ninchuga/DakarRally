@@ -17,7 +17,7 @@ namespace DakarRally.Models.Domain
             Distance = distance;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; }
         public int Year { get; }
         public List<Vehicle> Vehicles { get; private set; }
         public RaceStatusType Status { get; private set; }
@@ -42,6 +42,8 @@ namespace DakarRally.Models.Domain
         {
             if (Status == RaceStatusType.Running)
                 throw new Exception("Cannot add vehicle to the race that is running.");
+            if (Vehicles.Any(v => v.TeamName.Equals(vehicle.TeamName)))
+                throw new Exception($"Team name '{vehicle.TeamName}' is already taken.");
 
             Vehicles.Add(new Vehicle(vehicle.Id, vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicle.Type, VehicleStatus.Pending, 0, string.Empty));
 
@@ -63,6 +65,8 @@ namespace DakarRally.Models.Domain
         {
             if (Status == RaceStatusType.Running)
                 throw new Exception("Cannot update vehicle info while the race is running.");
+            if (Vehicles.Any(v => v.TeamName.Equals(vehicle.TeamName)))
+                throw new Exception($"Team name '{vehicle.TeamName}' is already taken.");
 
             Vehicles.FirstOrDefault(v => v.Id.Equals(vehicle.Id)).UpdateInfo(vehicle);
 

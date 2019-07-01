@@ -33,26 +33,40 @@ namespace DakarRally.Models.Domain
             return new Race(Guid.NewGuid(), year, new List<Vehicle>(), RaceStatusType.Pending, rallyTotalDistance);
         }
 
-        public List<Vehicle> AllVehiclesLeaderBoard()
-        {
-            return Vehicles.OrderBy(v => v.Type).ToList();
-        }
-
-        public Race AddVehicle(UpsertVehicle vehicle)
-        {
-            Vehicles.Add(new Vehicle(vehicle.Id, vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicle.Type, VehicleStatus.Pending, 0, string.Empty));
-
-            return this;
-        }
-
         public static Race Create(Guid id, int year, List<Vehicle> vehicles, RaceStatusType status, int distance)
         {
             return new Race(id, year, vehicles, status, distance);
         }
 
-        public List<Vehicle> LeaderBoardForVehicleType(VehicleType vehicleType)
+        public Race AddVehicle(UpsertVehicle vehicle)
         {
-            return Vehicles.Where(v => v.Type.Equals(vehicleType)).ToList();
+            if (Status == RaceStatusType.Running)
+                throw new Exception("Cannot add vehicle to the race that is running.");
+
+            Vehicles.Add(new Vehicle(vehicle.Id, vehicle.TeamName, vehicle.Model, vehicle.ManufacturingDate, vehicle.Type, VehicleStatus.Pending, 0, string.Empty));
+
+            return this;
+        }
+
+        public Race RemoveVehicleBy(Guid vehicleId)
+        {
+            if (Status == RaceStatusType.Running)
+                throw new Exception("Vehicle cannot be removed from the race while the race is running.");
+
+            var vehicleToRemove = Vehicles.FirstOrDefault(vehicle => vehicle.Id.Equals(vehicleId));
+            Vehicles.Remove(vehicleToRemove);
+
+            return this;
+        }
+
+        public Race UpdateVehicleInfo(UpsertVehicle vehicle)
+        {
+            if (Status == RaceStatusType.Running)
+                throw new Exception("Cannot update vehicle info while the race is running.");
+
+            Vehicles.FirstOrDefault(v => v.Id.Equals(vehicle.Id)).UpdateInfo(vehicle);
+
+            return this;
         }
 
         public Race StartRace(int checkRaceProgressionInSeconds)
@@ -68,12 +82,14 @@ namespace DakarRally.Models.Domain
             return this;
         }
 
-        public Race RemoveVehicleBy(Guid vehicleId)
+        public List<Vehicle> AllVehiclesLeaderBoard()
         {
-            var vehicleToRemove = Vehicles.FirstOrDefault(vehicle => vehicle.Id.Equals(vehicleId));
-            Vehicles.Remove(vehicleToRemove);
+            return Vehicles.OrderBy(v => v.Type).ToList();
+        }
 
-            return this;
+        public List<Vehicle> LeaderBoardForVehicleType(VehicleType vehicleType)
+        {
+            return Vehicles.Where(v => v.Type.Equals(vehicleType)).ToList();
         }
 
         public RaceStatus RaceStatus()
@@ -129,13 +145,6 @@ namespace DakarRally.Models.Domain
         public VehicleStatistics VehicleStatisticsBy(Guid vehicleId)
         {
             return Vehicles.FirstOrDefault(v => v.Id.Equals(vehicleId)).VehicleStatistics();
-        }
-
-        public Race UpdateVehicleInfo(UpsertVehicle vehicle)
-        {
-            Vehicles.FirstOrDefault(v => v.Id.Equals(vehicle.Id)).UpdateInfo(vehicle);
-
-            return this;
         }
 
         private RaceStatusType CheckRaceStatus()

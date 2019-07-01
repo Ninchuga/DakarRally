@@ -2,9 +2,6 @@
 using DakarRally.Helpers;
 using DakarRally.Models.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DakarRally.Models.Domain
 {
@@ -22,7 +19,7 @@ namespace DakarRally.Models.Domain
             FinishTime = finishTime;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; }
         public string TeamName { get; private set; }
         public string Model { get; private set; }
         public DateTime ManufacturingDate { get; private set; }
